@@ -4,6 +4,7 @@
 import BaseValidator from '../../src/validators/base';
 import _ from '../../src/utils/underscore';
 import { expect } from 'chai';
+import sinon from 'sinon';
 
 describe('./validators/base.js', function () {
   let validator;
@@ -33,5 +34,26 @@ describe('./validators/base.js', function () {
     });
     expect(validator.valid).to.be.not.ok;
     expect(validator.message).to.equal('invalid');
+  });
+});
+
+describe('./validator/TestBase.validate', function () {
+  const tests = { gotit: () => true };
+  const stub = sinon.stub(tests, 'gotit');
+
+  class TestValidator extends BaseValidator {
+    constructor(p1, p2) {
+      tests.gotit(p1, p2);
+      super({ field1: { valid: true, value: 'val1' } });
+    }
+  }
+
+  it('should create TestBase validator', function () {
+    const test = TestValidator.validate('params1', 'params2');
+    expect(stub).have.been.calledWith('params1', 'params2');
+  })
+
+  after(function() {
+    stub.restore();
   });
 });
