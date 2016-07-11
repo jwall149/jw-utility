@@ -1,14 +1,16 @@
 {
   "name": "jw-utility",
-  "version": "0.1.0",
+  "version": "0.1.6",
   "description": "A collections of utilities for web development with node",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --recursive",
     "test-grep": "mocha --compilers js:babel-core/register --recursive -g",
-    "compile": "babel -d dist/ src/",
-    "prepublish": "npm run compile",
-    "preinstall": "npm install -g babel-cli mocha"
+    "compile": "babel -d lib src",
+    "prepublish": "npm run compile"
+  },
+  "directories": {
+    "lib": "./lib"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,8 @@
     "Validator"
   ],
   "devDependencies": {
-    "babel": "^4.6.0",
+    "babel": "^6.5.2",
+    "babel-cli": "^6.10.1",
     "babel-core": "^6.10.4",
     "babel-eslint": "^6.1.2",
     "babel-preset-es2015": "^6.9.0",
