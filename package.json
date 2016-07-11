@@ -1,6 +1,6 @@
 {
   "name": "jw-utility",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A collections of utilities for web development with node",
   "main": "lib/index.js",
   "scripts": {

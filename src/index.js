@@ -3,7 +3,7 @@ import './utils/string';
 import Settings from './settings';
 import Regexs from './cons/regexps';
 import _ from './utils/underscore';
-import ValidatorBase from './validators/base';
-import FieldBase from './validators/fields/base';
+import BaseValidator from './validators/base';
+import BaseField from './validators/fields/base';
 
-export { _, Settings, ValidatorBase, FieldBase };
+export { _, Settings, BaseValidator, BaseField };
