@@ -35,5 +35,57 @@ describe('./utils/underscore.js rget', function () {
     expect(_.rget('boobar', obj)).to.be.ok;
     expect(_.rget('boofoo', obj)).to.not.be.ok;
   })
+});
 
-})
+describe('./utils/underscore.js collect', function () {
+  let obj = {foo: 1, bar: {foo: 1, bar: 0}, foofoo: {foobar: {foo: 'bar'}}, boofoo: false, boobar: true};
+  it('should return null when target is not object', function () {
+    expect(_.collect(null, 'foo')).to.be.null;
+    expect(_.collect(1, 'foo')).to.be.null;
+    expect(_.collect('asdf', 'foo')).to.be.null;
+  });
+
+  it('should return null with empty key', () => {
+    expect(_.collect(obj)).to.be.null;
+    expect(_.collect(obj, '')).to.be.null;
+    expect(_.collect(obj, [])).to.be.null;
+    expect(_.collect(obj, {})).to.be.null;
+  })
+
+  it('should return null with key other than string, array or object', function () {
+    expect(_.collect(obj, 1)).to.be.null;
+    expect(_.collect(obj, NaN)).to.be.null;
+    expect(_.collect(obj, true)).to.be.null;
+    expect(_.collect(obj, 1.2)).to.be.null;
+    expect(_.collect(obj, () => null)).to.be.null;
+  });
+
+  it('should return right value when key is a string', () => {
+    expect(_.collect(obj, 'foo')).to.equal(1);
+    expect(_.collect(obj, 'bar')).to.deep.equal({foo: 1, bar: 0});
+    expect(_.collect(obj, 'foofoo')).to.deep.equal({foobar: {foo: 'bar'}});
+    expect(_.collect(obj, 'boofoo')).to.not.be.ok;
+    expect(_.collect(obj, 'boobar')).to.be.ok;
+  });
+
+  it('should return value when key is an array', () => {
+    expect(_.collect(obj, ['foo', 'bar'])).to.deep.equal({foo: 1, bar: {foo: 1, bar: 0}})
+    expect(_.collect(obj, ['foo', 'boofoo'])).to.deep.equal({foo: 1, boofoo: false});
+  });
+
+  it('should return value when key is an object', () => {
+    expect(_.collect(obj, {bar: ['foo']})).to.deep.equal({bar: {foo: 1}});
+    expect(_.collect(obj, {bar: ['bar']})).to.deep.equal({bar: {bar: 0}});
+    expect(_.collect(obj, {bar: 'bar'})).to.deep.equal({bar: 0});
+    expect(_.collect(obj, {bar: ['foo', 'bar']})).to.deep.equal({bar: {foo: 1, bar: 0}});
+    expect(_.collect(obj, {foofoo: { foobar: ['foo']}})).to.deep.equal({foofoo: {foobar: {foo: 'bar'}}});
+  });
+
+  it('should return null when key does not exist', () => {
+    expect(_.collect(obj, ['foo', 'nofoo'])).to.deep.equal({foo: 1, nofoo: undefined});
+  });
+
+  it('should return value of combination of key', () => {
+    expect(_.collect(obj, ['foo', {bar: ['bar']}], ['foofoo', 'foobar'])).to.deep.equal({foo: 1, bar: {bar: 0}});
+  });
+});
